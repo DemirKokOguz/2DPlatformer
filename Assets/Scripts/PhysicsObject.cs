@@ -10,7 +10,7 @@ public class PhysicsObject : MonoBehaviour
     public LayerMask m_Mask; //obstacle mask
 
     protected BoxCollider2D m_BoxCollider2D; //it is necessery for boxcasting, we need size of it
-    protected Rigidbody2D m_rigidbody2D; //we move the oject with rigidbody.position
+    protected Rigidbody2D m_Rigidbody2D; //we move the oject with rigidbody.position
     
     protected Vector2 m_Velocity;  //Velocity vector
 
@@ -24,7 +24,7 @@ public class PhysicsObject : MonoBehaviour
     void Awake()
     {
         m_BoxCollider2D = GetComponent<BoxCollider2D>();
-        m_rigidbody2D = GetComponent<Rigidbody2D>();
+        m_Rigidbody2D = GetComponent<Rigidbody2D>();
     }
     
 
@@ -35,19 +35,19 @@ public class PhysicsObject : MonoBehaviour
 
         //law of physics: Last Velocity = First Velocity + Acceleration * Change of time
         //delta means change time of between two frame
-        m_Velocity += m_GravityModifier * Physics2D.gravity * Time.deltaTime;
+        m_Velocity += m_GravityModifier * Physics2D.gravity * Time.fixedDeltaTime;
 
         //change of position = Velocity * Change of Time. these two equations are basic highscool level infos of physics
-        Vector2 deltaPosition = m_Velocity * Time.deltaTime;
+        Vector2 deltaPosition = m_Velocity * Time.fixedDeltaTime;
         
         //Now we are at the most painful place. Why There are two Move functions. Because if character try to move horizontal
         //rigidbody.position try to go inside of the ground. We must calculate seperately.
-        Vector2 moveVertical = Vector2.right * deltaPosition.x;  //vertical Movement vector
-        Move(moveVertical);
+        Vector2 moveHorizontal = Vector2.right * deltaPosition.x;  //Horizontal Movement vector
+        Move(moveHorizontal);
 
         
-        Vector2 moveHorizontal = deltaPosition.y * Vector2.up;  //Horizontal movement vector
-        Move(moveHorizontal);
+        Vector2 moveVertical = deltaPosition.y * Vector2.up;  //Vertical movement vector
+        Move(moveVertical);
 
         //Move(deltaPosition); if you delete two Move functions and write this Move function you will see what i mean.
 
@@ -57,7 +57,7 @@ public class PhysicsObject : MonoBehaviour
     {
         float distance = move.magnitude;
 
-        Vector2 origin = m_rigidbody2D.position + m_BoxCollider2D.offset;
+        Vector2 origin = m_Rigidbody2D.position + m_BoxCollider2D.offset;
 
         int count = Physics2D.BoxCastNonAlloc(origin, m_BoxCollider2D.size, 0f, move, m_HitInfos, distance + m_ShellDistance, m_Mask);
         
@@ -81,6 +81,6 @@ public class PhysicsObject : MonoBehaviour
             distance = modifiedDistance < distance ? modifiedDistance : distance;
         }
 
-        m_rigidbody2D.position += move.normalized * distance;
+        m_Rigidbody2D.position += move.normalized * distance;
     }
 }
