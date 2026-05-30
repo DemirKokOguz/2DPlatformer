@@ -14,7 +14,11 @@ public class PhysicsObject : MonoBehaviour
 
     protected Vector2 m_Velocity;  //Velocity vector
 
-    protected RaycastHit2D[] m_HitInfos = new RaycastHit2D[16]; //physics.boxcastnonalloc return it. this has the infos of the surface normals
+    protected const int m_MaxHitCount = 8;
+
+    protected float m_MinSurfaceAngle = .75f;
+
+    protected RaycastHit2D[] m_HitInfos = new RaycastHit2D[m_MaxHitCount]; //physics.boxcastnonalloc takes it as parameter. This will has the informations of the surface normals
                                                                 //and hit distance. we stop the object before object goes through an object
     protected bool m_Grounded; //If the ground normal is equal to 1, it means we are on the ground.
 
@@ -40,8 +44,8 @@ public class PhysicsObject : MonoBehaviour
         //change of position = Velocity * Change of Time.
         Vector2 deltaPosition = m_Velocity * Time.fixedDeltaTime;
         
-        //Why are there two Move functions. Because if the character try to move horizontal
-        //rigidbody.position try to go inside of the ground. We must calculate it seperately.
+        //Why are there two Move functions? Because if the character tries to move horizontal,
+        //rigidbody.position tries to go the inside of the ground. We must calculate it seperately.
         Vector2 moveHorizontal = Vector2.right * deltaPosition.x;  //Horizontal Movement vector
         Move(moveHorizontal);
 
@@ -59,18 +63,19 @@ public class PhysicsObject : MonoBehaviour
 
         Vector2 origin = m_Rigidbody2D.position + m_BoxCollider2D.offset;
 
-        int count = Physics2D.BoxCastNonAlloc(origin, m_BoxCollider2D.size, 0f, move, m_HitInfos, distance + m_ShellDistance, m_Mask);
+        float angle = 0f;
+        int count = Physics2D.BoxCastNonAlloc(origin, m_BoxCollider2D.size, angle, move, m_HitInfos, distance + m_ShellDistance, m_Mask);
         
 
         for (int i = 0; i < count; i++)
         {
             Vector2 currentNormal = m_HitInfos[i].normal;
 
-            if (currentNormal.y == 1)
+            if (currentNormal.y > m_MinSurfaceAngle)
             {
                 m_Grounded = true;
             }
-
+            
             float project = Vector2.Dot(currentNormal, m_Velocity);
             if (project < 0)
             {
@@ -78,7 +83,7 @@ public class PhysicsObject : MonoBehaviour
             }
 
             float modifiedDistance = m_HitInfos[i].distance - m_ShellDistance;
-            distance = modifiedDistance < distance ? modifiedDistance : distance;
+            distance = Mathf.Min(modifiedDistance, distance);
         }
 
         m_Rigidbody2D.position += move.normalized * distance;
