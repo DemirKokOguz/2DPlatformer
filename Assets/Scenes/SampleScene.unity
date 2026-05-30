@@ -503,10 +503,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1733312196}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6ea8152125a15149a2f84d7be9bf936, type: 3}
+  m_Script: {fileID: 11500000, guid: 8cfb2930cc1693b42be42e163e60bf7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_GravityModifier: 1
+  m_GravityScaler: 1
   m_Mask:
     serializedVersion: 2
     m_Bits: 256

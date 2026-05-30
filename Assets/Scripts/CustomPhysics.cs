@@ -5,12 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public class CustomPhysics : MonoBehaviour
 {
-    public float m_GravityScaler = 1f; //allows us to set low gravity
+    public float m_GravityScaler = 1f; //Allows us to set low gravity
 
-    public LayerMask m_Mask; //obstacle mask
+    public LayerMask m_Mask; //Obstacle mask
 
     protected BoxCollider2D m_BoxCollider2D; //It is necessary for boxcasting; we need its size.
-    protected Rigidbody2D m_Rigidbody2D; //we move the object with rigidbody.position
+    protected Rigidbody2D m_Rigidbody2D; //We move the object with rigidbody.position
 
     protected Vector2 m_Velocity;  //Velocity vector
 
@@ -18,13 +18,12 @@ public class CustomPhysics : MonoBehaviour
 
     protected float m_MinSurfaceAngle = .75f;
 
-    protected RaycastHit2D[] m_HitInfos = new RaycastHit2D[m_MaxHitCount]; //physics.boxcastnonalloc takes it as parameter. This will have the information of the surface normals
-                                                                           //and hit distance. we stop the object before object goes through an object
+    protected RaycastHit2D[] m_HitInfos = new RaycastHit2D[m_MaxHitCount]; //physics.boxcastnonalloc takes it as parameter.
+                                                                           
     protected bool m_Grounded; //If the ground normal is equal to 1, it means we are on the ground.
 
     protected const float m_MinCastDistance = 0.01f; //This prevents colliders from clipping into each other.
-
-    // Start is called before the first frame update
+    
     void Awake()
     {
         m_BoxCollider2D = GetComponent<BoxCollider2D>();
@@ -38,22 +37,17 @@ public class CustomPhysics : MonoBehaviour
 
 
         //law of physics: Last Velocity = First Velocity + Acceleration * Change of time
-        //delta means change time of between two frame
         m_Velocity += m_GravityScaler * Physics2D.gravity * Time.fixedDeltaTime;
 
         //change of position = Velocity * Change of Time.
         Vector2 deltaPosition = m_Velocity * Time.fixedDeltaTime;
-
-        //Why are there two Move functions? Because if the character tries to move horizontally,
-        //rigidbody.position tries to go the inside of the ground. We must calculate it seperately.
+        
         Vector2 moveHorizontal = Vector2.right * deltaPosition.x;  //Horizontal Movement vector
         MoveObject(moveHorizontal);
 
 
         Vector2 moveVertical = deltaPosition.y * Vector2.up;  //Vertical movement vector
         MoveObject(moveVertical);
-
-        //Move(deltaPosition); if you delete two Move functions and write this Move function you will see what i mean.
 
     }
 
