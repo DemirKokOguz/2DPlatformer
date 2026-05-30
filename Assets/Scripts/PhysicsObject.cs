@@ -18,7 +18,7 @@ public class PhysicsObject : MonoBehaviour
 
     protected float m_MinSurfaceAngle = .75f;
 
-    protected RaycastHit2D[] m_HitInfos = new RaycastHit2D[m_MaxHitCount]; //physics.boxcastnonalloc takes it as parameter. This will has the informations of the surface normals
+    protected RaycastHit2D[] m_HitInfos = new RaycastHit2D[m_MaxHitCount]; //physics.boxcastnonalloc takes it as parameter. This will have the information of the surface normals
                                                                 //and hit distance. we stop the object before object goes through an object
     protected bool m_Grounded; //If the ground normal is equal to 1, it means we are on the ground.
 
@@ -44,7 +44,7 @@ public class PhysicsObject : MonoBehaviour
         //change of position = Velocity * Change of Time.
         Vector2 deltaPosition = m_Velocity * Time.fixedDeltaTime;
         
-        //Why are there two Move functions? Because if the character tries to move horizontal,
+        //Why are there two Move functions? Because if the character tries to move horizontally,
         //rigidbody.position tries to go the inside of the ground. We must calculate it seperately.
         Vector2 moveHorizontal = Vector2.right * deltaPosition.x;  //Horizontal Movement vector
         Move(moveHorizontal);
