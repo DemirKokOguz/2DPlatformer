@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPlatformerController : PhysicsObject
+public class PlayerPlatformerController : CustomPhysics
 {
     public float m_JumpTakeOffSpeed = 7f;
     public float m_MaxSpeed = 7f;
