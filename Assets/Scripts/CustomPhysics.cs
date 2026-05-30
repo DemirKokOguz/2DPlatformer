@@ -24,6 +24,9 @@ public class CustomPhysics : MonoBehaviour
 
     protected const float m_MinCastDistance = 0.01f; //This prevents colliders from clipping into each other.
     
+    public bool Grounded { get { return m_Grounded; } }
+    public Vector2 Velocity { get { return m_Velocity; } }
+
     void Awake()
     {
         m_BoxCollider2D = GetComponent<BoxCollider2D>();
@@ -31,7 +34,7 @@ public class CustomPhysics : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         m_Grounded = false;
 
@@ -81,5 +84,15 @@ public class CustomPhysics : MonoBehaviour
         }
 
         m_Rigidbody2D.position += move.normalized * distance;
+    }
+
+    public void SetVerticalVelocity(float vertical)
+    {
+        m_Velocity.y = vertical;
+    }
+
+    public void SetHorizontalVelocity(float horizontal)
+    {
+        m_Velocity.x = horizontal;
     }
 }
