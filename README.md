@@ -1,4 +1,4 @@
-I created a basic kinematic player controller. Unity version that I used for the project is Unity 2018.4 LTS. There are 2 classes. "CustomPhysics" and "PlayerMovement". The PlayerMovement class inherits from CustomPhysics
+I created a basic kinematic player controller. Unity version that I used for the project is Unity 2018.4 LTS. There are 2 classes. "CustomPhysics" and "PlayerMovement".
 
 PlayerMovement takes inputs and moves the player.
 
