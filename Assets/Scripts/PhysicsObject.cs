@@ -5,20 +5,20 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(BoxCollider2D))]
 public class PhysicsObject : MonoBehaviour
 {
-    public float m_GravityModifier = 1f; //we can make low gravity or not
+    public float m_GravityModifier = 1f; //allows us to set low gravity
 
     public LayerMask m_Mask; //obstacle mask
 
-    protected BoxCollider2D m_BoxCollider2D; //it is necessery for boxcasting, we need size of it
-    protected Rigidbody2D m_Rigidbody2D; //we move the oject with rigidbody.position
-    
+    protected BoxCollider2D m_BoxCollider2D; //It is necessary for boxcasting; we need its size.
+    protected Rigidbody2D m_Rigidbody2D; //we move the object with rigidbody.position
+
     protected Vector2 m_Velocity;  //Velocity vector
 
     protected RaycastHit2D[] m_HitInfos = new RaycastHit2D[16]; //physics.boxcastnonalloc return it. this has the infos of the surface normals
                                                                 //and hit distance. we stop the object before object goes through an object
-    protected bool m_Grounded; //if ground normal equel to 1 that means that we are on the ground
-    
-    protected const float m_ShellDistance = 0.01f; //this do colliders dont get inside each other
+    protected bool m_Grounded; //If the ground normal is equal to 1, it means we are on the ground.
+
+    protected const float m_ShellDistance = 0.01f; //This prevents colliders from clipping into each other.
 
     // Start is called before the first frame update
     void Awake()
@@ -37,11 +37,11 @@ public class PhysicsObject : MonoBehaviour
         //delta means change time of between two frame
         m_Velocity += m_GravityModifier * Physics2D.gravity * Time.fixedDeltaTime;
 
-        //change of position = Velocity * Change of Time. these two equations are basic highscool level infos of physics
+        //change of position = Velocity * Change of Time.
         Vector2 deltaPosition = m_Velocity * Time.fixedDeltaTime;
         
-        //Now we are at the most painful place. Why There are two Move functions. Because if character try to move horizontal
-        //rigidbody.position try to go inside of the ground. We must calculate seperately.
+        //Why are there two Move functions. Because if the character try to move horizontal
+        //rigidbody.position try to go inside of the ground. We must calculate it seperately.
         Vector2 moveHorizontal = Vector2.right * deltaPosition.x;  //Horizontal Movement vector
         Move(moveHorizontal);
 
